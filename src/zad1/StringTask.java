@@ -8,13 +8,12 @@ enum TaskState{
 }
 
 public class StringTask implements Runnable {
-	private TaskState currentTaskState;
+	public volatile TaskState currentTaskState;
 	Thread thread;
 	private boolean currentTaskFlag = false;
-	private String result = "";
-	private String _userTxt;
-	private int _userCounter;
-	
+	public volatile String result = "";
+	public volatile String _userTxt;
+	public volatile int _userCounter;
 	
 	public StringTask(String userTxt, int userCounter) {
 		currentTaskState = TaskState.CREATED;
@@ -26,10 +25,14 @@ public class StringTask implements Runnable {
 	}
 	@Override
 	public void run() {
-		for(int counter = 0; counter < _userCounter && !thread.isInterrupted(); counter++)
+		int counter;
+		for(counter = 0; counter < _userCounter && !thread.isInterrupted(); counter++)
 			result += _userTxt;
-		currentTaskFlag = true;
-		currentTaskState = TaskState.READY;
+		
+		if (counter == _userCounter) {
+			currentTaskState = TaskState.READY;		
+			currentTaskFlag = true;
+		}
 	}
 	public String getResult() {
 		return result;
@@ -43,9 +46,9 @@ public class StringTask implements Runnable {
         thread.start();
 	}
 	public void abort() {
+		thread.interrupt();
 		currentTaskState = TaskState.ABORTED;
-        thread.interrupt();
-        currentTaskFlag = true;
+		currentTaskFlag = true;
 	}
 	public boolean isDone() {
 		return currentTaskFlag;

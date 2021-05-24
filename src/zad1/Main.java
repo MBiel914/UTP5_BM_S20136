@@ -6,18 +6,21 @@
 
 package zad1;
 
-
 public class Main {
   public static void main(String[] args) throws InterruptedException {
     StringTask task = new StringTask("A", 70000);
     System.out.println("Task " + task.getState());
     task.start();
     if (args.length > 0 && args[0].equals("abort")) {
-    	Thread.sleep(1000);
-    	task.abort();
-    	
-    	task = (StringTask) new StringTask(task);
-    	task.start();
+    	Thread thread = new Thread(() -> {
+            try {
+              Thread.sleep(1000);
+              task.abort();
+            } catch (InterruptedException e) {
+            	System.out.println(e.getMessage());
+            }
+          });
+    	thread.start();
     }
     while (!task.isDone()) {
       Thread.sleep(500);
