@@ -3,7 +3,6 @@ package zad3;
 import java.util.concurrent.BlockingQueue;
 
 public class WeightCounter implements Runnable{
-	//Warehouse _warehouse;
 	BlockingQueue<Item> _warehouse;
 	private double result = 0;
 	private int counter = 0, power = 1;

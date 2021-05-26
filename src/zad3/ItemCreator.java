@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 public class ItemCreator implements Runnable{
-    //Warehouse _warehouse;
     BlockingQueue<Item> _warehouse;
     
     public ItemCreator(BlockingQueue<Item> warehouse){
@@ -29,7 +28,6 @@ public class ItemCreator implements Runnable{
 		    	}
 		    }
 		    
-		    //_warehouse.AllItemsAdded();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
